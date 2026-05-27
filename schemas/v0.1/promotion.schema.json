@@ -14,6 +14,7 @@
     },
     "metadata": {
       "type": "object",
+      "description": "PRI keeps metadata open so implementations can round-trip Kubernetes-style or server-populated metadata without failing authoring validation.",
       "required": ["name"],
       "additionalProperties": true,
       "properties": {

@@ -41,6 +41,7 @@ Required `spec` fields:
 Optional fields:
 
 - `spec.plan`: named rollout plan.
+- `metadata.labels`: implementation-neutral classification metadata.
 - `metadata.annotations`: implementation-neutral metadata.
 
 ### Target
@@ -92,6 +93,11 @@ The draft runtime shape is:
 ```text
 Promotion -> PromotionRun -> TargetResult -> Evidence
 ```
+
+`PromotionRun` is an informative v0.1 term for one attempt to execute a
+Promotion. `TargetResult` is an informative v0.1 term for the outcome recorded
+for one target in that attempt. Their portable document shapes are intentionally
+left to a later draft.
 
 PRI-compatible implementations may store these records in Kubernetes resources,
 files, databases, CI artifacts, or another durable store.

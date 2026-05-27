@@ -65,7 +65,7 @@ spec:
         stage: production
         region: eu
       delivery:
-        ref: argo
+        ref: delivery-system
         mode: push
 ```
 

@@ -1,6 +1,9 @@
 # Governance
 
-PRI is currently maintained by the initial project maintainers.
+PRI is currently maintained by the initial project maintainer.
+
+Initial maintainer: Vinayaka Krishnamurthy
+([@vinnxcapital-gif](https://github.com/vinnxcapital-gif)).
 
 The governance goal is to make PRI independent enough that projects can
 implement the contract without adopting any specific reference implementation.
@@ -12,4 +15,3 @@ implement the contract without adopting any specific reference implementation.
 3. Maintainer: trusted to merge changes and guide compatibility.
 
 The maintainer list will be expanded after real external participation exists.
-

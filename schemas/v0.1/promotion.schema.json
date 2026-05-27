@@ -21,7 +21,8 @@
         "name": {
           "type": "string",
           "minLength": 1,
-          "maxLength": 253
+          "maxLength": 253,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
         },
         "labels": {
           "$ref": "#/$defs/stringMap"
@@ -38,7 +39,9 @@
       "properties": {
         "unit": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "maxLength": 253,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
         },
         "version": {
           "type": "string",
@@ -66,7 +69,9 @@
       "properties": {
         "name": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "maxLength": 253,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
         },
         "labels": {
           "$ref": "#/$defs/stringMap"
@@ -83,7 +88,9 @@
       "properties": {
         "ref": {
           "type": "string",
-          "minLength": 1
+          "minLength": 1,
+          "maxLength": 253,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
         },
         "mode": {
           "type": "string",

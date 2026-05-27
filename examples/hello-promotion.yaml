@@ -3,7 +3,7 @@ kind: Promotion
 metadata:
   name: checkout-v123
   annotations:
-    pri.dev/source: example
+    example.com/source: example
 spec:
   unit: checkout
   version: v1.2.3
@@ -16,4 +16,3 @@ spec:
       delivery:
         ref: delivery-system
         mode: push
-

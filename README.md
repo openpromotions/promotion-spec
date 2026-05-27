@@ -85,6 +85,15 @@ community later agrees otherwise.
 PRI is experimental. Breaking changes are expected while the first
 implementations prove the contract.
 
+Current draft material:
+
+- [PRI v0.1 draft](spec/pri-v0.1.md)
+- [Promotion JSON Schema](schemas/v0.1/promotion.schema.json)
+- [Hello Promotion example](examples/hello-promotion.yaml)
+- [Conformance notes](conformance/README.md)
+- [Governance](GOVERNANCE.md)
+- [Contributing](CONTRIBUTING.md)
+
 ## Contributing
 
 Promotion interoperability will only be useful if it reflects real-world
@@ -101,4 +110,3 @@ Contributions are welcome in the form of:
 If you work on delivery platforms, CI/CD, GitOps, fleet management, compliance,
 security gates, or internal developer platforms, your feedback can materially
 improve the outcome of this specification.
-

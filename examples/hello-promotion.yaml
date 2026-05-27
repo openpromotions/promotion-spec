@@ -1,0 +1,18 @@
+apiVersion: pri/v0.1
+kind: Promotion
+metadata:
+  name: checkout-v123
+  annotations:
+    example.com/source: example
+spec:
+  unit: checkout
+  version: v1.2.3
+  plan: progressive
+  targets:
+    - name: prod-eu
+      labels:
+        stage: production
+        region: eu
+      delivery:
+        ref: delivery-system
+        mode: push

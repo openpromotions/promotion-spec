@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:pri:schema:promotion:v0.1",
+  "title": "PRI Promotion",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "pri/v0.1"
+    },
+    "kind": {
+      "const": "Promotion"
+    },
+    "metadata": {
+      "type": "object",
+      "description": "PRI keeps metadata open so implementations can round-trip Kubernetes-style or server-populated metadata without failing authoring validation.",
+      "required": ["name"],
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 253,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+        },
+        "labels": {
+          "$ref": "#/$defs/stringMap"
+        },
+        "annotations": {
+          "$ref": "#/$defs/stringMap"
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "required": ["unit", "version", "targets"],
+      "additionalProperties": false,
+      "properties": {
+        "unit": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 253,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+        },
+        "version": {
+          "type": "string",
+          "minLength": 1
+        },
+        "plan": {
+          "type": "string",
+          "minLength": 1
+        },
+        "targets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/target"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "target": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 253,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+        },
+        "labels": {
+          "$ref": "#/$defs/stringMap"
+        },
+        "delivery": {
+          "$ref": "#/$defs/delivery"
+        }
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "required": ["ref", "mode"],
+      "additionalProperties": false,
+      "properties": {
+        "ref": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 253,
+          "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["push", "pull"]
+        },
+        "parameters": {
+          "$ref": "#/$defs/stringMap"
+        }
+      }
+    },
+    "stringMap": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}

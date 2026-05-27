@@ -1,0 +1,32 @@
+name: Validate
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate JSON
+        run: python3 -m json.tool schemas/v0.1/promotion.schema.json >/dev/null
+      - name: Install validators
+        run: python3 -m pip install jsonschema pyyaml
+      - name: Validate examples against schema
+        run: python3 scripts/validate-example.py schemas/v0.1/promotion.schema.json examples/hello-promotion.yaml
+      - name: Check required files
+        run: |
+          test -f README.md
+          test -f LICENSE
+          test -f CONTRIBUTING.md
+          test -f GOVERNANCE.md
+          test -f CODE_OF_CONDUCT.md
+          test -f spec/pri-v0.1.md
+          test -f examples/hello-promotion.yaml
+          test -f scripts/validate-example.py

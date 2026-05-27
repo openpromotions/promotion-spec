@@ -159,6 +159,26 @@ Optional fields:
 
 Evidence records why a promotion, check, or target result is trustworthy.
 
+PRI v0.1 supports Evidence in two shapes:
+
+- inline Evidence under `Promotion.spec.evidence[]`;
+- standalone Evidence documents with `kind: Evidence`.
+
+Inline Evidence uses `name` as the stable identifier. Standalone Evidence uses
+the standard PRI document envelope, so its stable identifier is `metadata.name`.
+The mapping is direct:
+
+| Inline Evidence | Standalone Evidence |
+|---|---|
+| `name` | `metadata.name` |
+| `type` | `spec.type` |
+| `uri` | `spec.uri` |
+| `digest` | `spec.digest` |
+
+Inline Evidence is convenient for authoring compact Promotion documents.
+Standalone Evidence is useful when evidence is produced or retained as an
+independent PRI record.
+
 Required fields:
 
 - `name`: stable evidence identifier.

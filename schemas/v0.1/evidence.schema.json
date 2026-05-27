@@ -2,6 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "urn:pri:schema:evidence:v0.1",
   "title": "PRI Evidence",
+  "description": "Standalone Evidence document. Its metadata.name maps to inline Promotion.spec.evidence[].name; spec.type, spec.uri, and spec.digest map to the corresponding inline Evidence fields.",
   "type": "object",
   "required": ["apiVersion", "kind", "metadata", "spec"],
   "additionalProperties": false,

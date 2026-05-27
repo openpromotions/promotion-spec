@@ -27,6 +27,30 @@ jobs:
           python3 scripts/validate-example.py schemas/v0.1/promotionrun.schema.json examples/01-promotion-run.yaml
           python3 scripts/validate-example.py schemas/v0.1/evidence.schema.json examples/02-evidence.yaml
           python3 scripts/validate-example.py schemas/v0.1/conformance-profile.schema.json examples/03-conformance-profile.yaml
+      - name: Verify format validation
+        run: |
+          cp examples/02-evidence.yaml /tmp/bad-evidence.yaml
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("/tmp/bad-evidence.yaml")
+          path.write_text(path.read_text().replace("https://example.com/evidence/security-scan", "not a uri"))
+          PY
+          if python3 scripts/validate-example.py schemas/v0.1/evidence.schema.json /tmp/bad-evidence.yaml; then
+            echo "format validation accepted an invalid URI" >&2
+            exit 1
+          fi
+          cp examples/01-promotion-run.yaml /tmp/bad-promotion-run.yaml
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("/tmp/bad-promotion-run.yaml")
+          path.write_text(path.read_text().replace("2026-05-27T17:00:00Z", "not a timestamp", 1))
+          PY
+          if python3 scripts/validate-example.py schemas/v0.1/promotionrun.schema.json /tmp/bad-promotion-run.yaml; then
+            echo "format validation accepted an invalid date-time" >&2
+            exit 1
+          fi
       - name: Parse conformance scenarios
         run: |
           python3 - <<'PY'

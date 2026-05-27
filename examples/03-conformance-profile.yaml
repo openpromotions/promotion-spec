@@ -1,0 +1,11 @@
+apiVersion: pri/v0.1
+kind: ConformanceProfile
+metadata:
+  name: example-runtime
+spec:
+  priVersion: v0.1
+  adoptionMode: emission
+  conformance:
+    document: true
+    runtime: true
+    decision: false

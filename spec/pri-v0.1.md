@@ -1,62 +1,128 @@
 # PRI v0.1 Draft
 
-PRI, the Promotion Runtime Interface, defines a portable promotion contract.
+PRI, the Promotion Runtime Interface, defines a portable promotion contract for
+advancing versioned artifacts across explicit targets with auditable decisions.
 
-This document is a draft. Normative language is intentionally light until early
-implementations prove the shape of the contract.
+This draft defines the core document model. Runtime semantics, bindings, and
+conformance are defined in companion documents:
+
+- [PRI Runtime v0.1](pri-runtime-v0.1.md)
+- [PRI Bindings](pri-bindings.md)
+- [PRI Conformance](pri-conformance.md)
 
 ## Goals
 
 PRI should let compatible systems answer the same core question:
 
-> Can this versioned artifact advance to these explicit targets under this
-> plan, with these gate and approval outcomes, and what evidence explains the
-> result?
+> Can this set of artifacts advance to these explicit targets under this plan,
+> with these check outcomes, and what evidence explains the result?
 
 ## Non-goals
 
-PRI does not manage fleet inventory, join clusters, reconcile GitOps
-applications, provision infrastructure, or prescribe one delivery system.
+PRI does not manage fleet inventory, join clusters, reconcile applications,
+provision infrastructure, prescribe one delivery system, or require a
+particular transport, controller model, RPC protocol, CLI, storage backend, or
+implementation language.
 
-## Core Objects
+## Core Rule
 
-### Promotion
+The core PRI schema stays strict. Adapters and bindings absorb implementation
+messiness.
 
-A Promotion is intent to advance one versioned artifact through a plan across
-explicit targets.
+An implementation may derive PRI fields from native objects, but any emitted PRI
+document MUST contain the required PRI fields and MUST use the portable PRI
+phase values. Native implementation values can be preserved in explicit
+implementation-specific fields where defined.
+
+## Document Envelope
 
 PRI documents use an `apiVersion` / `kind` / `metadata` envelope. The v0.1
 Promotion document requires:
 
-- `apiVersion`: PRI version for the document.
+- `apiVersion`: `pri/v0.1`.
 - `kind`: `Promotion`.
-- `metadata.name`: stable promotion identifier.
+- `metadata.name`: stable document identifier.
 
-Implementations may wrap PRI documents in API-server-specific envelopes, such
-as a Kubernetes Custom Resource with its own API group and version. The PRI
-`apiVersion` declares the contract version of the embedded document, not the API
-server version of the wrapping resource.
+The PRI `apiVersion` declares the PRI contract version of the document. Runtime
+or platform wrappers may have their own versioning, but wrapper versions are
+outside the PRI core contract.
 
-Portable identifiers such as `metadata.name`, `spec.unit`, `targets[].name`,
-and `delivery.ref` are DNS-1123 subdomain compatible in v0.1. This keeps PRI
-documents usable in Kubernetes-backed implementations while remaining valid for
-non-Kubernetes runtimes.
+Portable identifiers such as `metadata.name`, `spec.unit`, `spec.artifacts[].name`,
+`spec.targets[].name`, `spec.checks[].name`, `spec.evidence[].name`, and
+`delivery.ref` are DNS-1123 subdomain compatible in v0.1.
+
+## Promotion
+
+A Promotion is intent to advance one logical unit and one or more artifacts
+across explicit targets.
 
 Required `spec` fields:
 
-- `unit`: logical workload or artifact stream name.
-- `version`: desired version or artifact reference.
-- `targets`: explicit non-empty list of targets.
+- `unit`: logical workload, service, component, or artifact stream name.
+- `artifacts`: non-empty list of artifacts being promoted.
+- `targets`: non-empty list of explicit targets.
+
+Optional `spec` fields:
+
+- `plan`: named plan reference.
+- `checks`: checks that must be recorded before or during promotion.
+- `evidence`: evidence records or references known at authoring time.
+
+Optional metadata fields:
+
+- `metadata.labels`: classification metadata.
+- `metadata.annotations`: additional metadata.
+
+## Artifact
+
+An Artifact identifies a promoted item.
+
+Required fields:
+
+- `name`: stable artifact identifier.
 
 Optional fields:
 
-- `spec.plan`: named rollout plan.
-- `metadata.labels`: implementation-neutral classification metadata.
-- `metadata.annotations`: implementation-neutral metadata.
+- `version`: human-readable version or release label.
+- `digest`: content digest in `algorithm:value` form.
+- `uri`: URI for locating the artifact or artifact metadata.
 
-### Target
+PRI core does not assign registry-specific meaning to `digest` or `uri`.
+Bindings may define stronger interpretation and dereference behavior.
 
-A Target is an explicit place where a version may advance.
+## Plan
+
+A Plan defines ordering or strategy by reference.
+
+Required fields when `plan` is present:
+
+- `ref`: named plan reference known to the implementation.
+
+PRI v0.1 intentionally does not define a portable plan DAG. Future versions may
+standardize richer plan structure after implementations prove the common shape.
+
+## Check
+
+A Check is a named decision point that can block or inform promotion.
+
+Required fields:
+
+- `name`: stable check identifier.
+
+Optional fields:
+
+- `required`: boolean. `true` means failure blocks the promotion. `false` means
+  the check is recorded but does not block by itself. The default is `true`.
+- `policyRef`: named policy reference. PRI core does not define the policy
+  language.
+- `evidenceRefs`: names of evidence records that support the check.
+
+PRI v0.1 uses `required` as a boolean. More detailed enforcement modes can be
+added in a later version if real implementations need them.
+
+## Target
+
+A Target is an explicit place where artifacts may advance.
 
 Required fields:
 
@@ -67,70 +133,64 @@ Optional fields:
 - `labels`: selection and audit labels.
 - `delivery`: delivery handoff configuration.
 
-### Delivery
+## Delivery
 
-Delivery describes how an implementation hands work to the native delivery
+Delivery describes how an implementation hands work to its native delivery
 system. PRI does not require a specific delivery engine.
 
-Common fields:
+Required fields when `delivery` is present:
 
 - `ref`: local delivery binding name.
-- `mode`: `push` or `pull`. Push mode means the implementation writes the
-  target's desired state directly. Pull mode means the implementation publishes
-  desired state to a location the target reconciles from.
+- `mode`: one of `push`, `pull`, or `manual`.
+
+Delivery modes:
+
+- `push`: the implementation writes desired state directly.
+- `pull`: the implementation publishes desired state to a location the target
+  reconciles from.
+- `manual`: the implementation records a manual handoff, approval-only flow, or
+  audit-only promotion without automated delivery.
+
+Optional fields:
+
 - `parameters`: implementation-specific string map.
 
-### Plan
+## Evidence
 
-A Plan defines stage ordering and promotion strategy. PRI v0.1 treats `plan` as
-a named reference. The `plan` field references a plan definition known to the
-implementation. PRI v0.1 does not define the portable plan format; future
-Planner Interface drafts are expected to cover this.
+Evidence records why a promotion, check, or target result is trustworthy.
 
-### Evidence
+PRI v0.1 supports Evidence in two shapes:
 
-Evidence records why a promotion advanced, paused, or failed.
+- inline Evidence under `Promotion.spec.evidence[]`;
+- standalone Evidence documents with `kind: Evidence`.
 
-Evidence should include:
+Inline Evidence uses `name` as the stable identifier. Standalone Evidence uses
+the standard PRI document envelope, so its stable identifier is `metadata.name`.
+The mapping is direct:
 
-- decision timestamp;
-- implementation identity;
-- target name;
-- gate and approval outcomes;
-- delivery handoff identity;
-- native status links when available.
-
-## Runtime Contract
-
-The draft runtime shape is:
-
-```text
-Promotion -> PromotionRun -> TargetResult -> Evidence
-```
-
-`PromotionRun` is an informative v0.1 term for one attempt to execute a
-Promotion. `TargetResult` is an informative v0.1 term for the outcome recorded
-for one target in that attempt. Their portable document shapes are intentionally
-left to a later draft.
-
-PRI-compatible implementations may store these records in Kubernetes resources,
-files, databases, CI artifacts, or another durable store.
-
-## Extension Surface
-
-PRI v0.1 defines only the core promotion contract. Four extension interfaces are
-reserved for separate drafts:
-
-| Interface | Scope |
+| Inline Evidence | Standalone Evidence |
 |---|---|
-| KGI, Gate Interface | Custom gate contracts such as scan, SLO, approval, compliance, or business checks. |
-| KSI, Substrate Interface | Delivery handoff contracts for native delivery systems. |
-| KEI, Evidence Interface | Evidence sink contracts for audit stores, observability systems, and compliance archives. |
-| KPL, Planner Interface | Alternative planning strategies such as waves, windows, capacity, or failover ordering. |
+| `name` | `metadata.name` |
+| `type` | `spec.type` |
+| `uri` | `spec.uri` |
+| `digest` | `spec.digest` |
 
-Implementations are expected to negotiate future extension contracts through
-well-known identifiers or implementation-specific discovery. These extension
-contracts are intentionally not normative in v0.1.
+Inline Evidence is convenient for authoring compact Promotion documents.
+Standalone Evidence is useful when evidence is produced or retained as an
+independent PRI record.
+
+Required fields:
+
+- `name`: stable evidence identifier.
+- `type`: one of `verification`, `approval`, `test`, `scan`, `audit`, or `other`.
+- `uri`: URI for the evidence record.
+
+Optional fields:
+
+- `digest`: content digest in `algorithm:value` form.
+
+PRI core treats `uri` as a generic URI. Bindings may define URI schemes,
+dereference behavior, and evidence formats.
 
 ## Minimal Promotion Document
 
@@ -141,24 +201,52 @@ metadata:
   name: checkout-v123
 spec:
   unit: checkout
-  version: v1.2.3
-  plan: progressive
+  artifacts:
+    - name: checkout
+      version: v1.2.3
+  targets:
+    - name: prod-eu
+```
+
+## Complete Promotion Document
+
+```yaml
+apiVersion: pri/v0.1
+kind: Promotion
+metadata:
+  name: checkout-v123
+  labels:
+    team: payments
+  annotations:
+    example.com/source: release-request
+spec:
+  unit: checkout
+  artifacts:
+    - name: checkout
+      version: v1.2.3
+      digest: sha256:abc123
+      uri: https://example.com/artifacts/checkout/v1.2.3
+  plan:
+    ref: progressive
+  checks:
+    - name: security
+      required: true
+      policyRef: security-release-policy
+      evidenceRefs:
+        - security-scan
   targets:
     - name: prod-eu
       labels:
         stage: production
         region: eu
       delivery:
-        ref: delivery-system
+        ref: default
         mode: push
+        parameters:
+          path: services/checkout
+  evidence:
+    - name: security-scan
+      type: verification
+      uri: https://example.com/evidence/security-scan
+      digest: sha256:def456
 ```
-
-## Draft Conformance Levels
-
-| Level | Meaning |
-|---|---|
-| Document | Can parse and validate PRI documents. |
-| Decision | Can evaluate plan, gate, and approval state into deterministic next actions. |
-| Runtime | Can persist promotion attempts, target results, and evidence. |
-
-The conformance suite is not implemented in v0.1.

@@ -1,14 +1,17 @@
 # PRI Conformance
 
-PRI conformance is not implemented in v0.1.
+PRI v0.1 includes a conformance skeleton: levels, adoption modes, schemas, and
+scenario fixtures.
 
-The initial conformance direction is:
+See [PRI Conformance v0.1](../spec/pri-conformance.md) for the normative
+conformance model.
 
-| Level | Requirement |
-|---|---|
-| Document | Parse and validate PRI documents against schemas. |
-| Decision | Produce deterministic next actions from the same plan, gates, approvals, and state. |
-| Runtime | Persist promotion attempts, target results, and evidence. |
+Initial scenarios live in [`scenarios/`](scenarios/):
 
-The first executable suite should start with document-level tests.
+- `00-happy-path.yaml`
+- `01-failed-check.yaml`
+- `02-cancelled-run.yaml`
 
+The first executable suite should validate documents, run the semantic runtime
+operations against an implementation, and compare resulting PromotionRun records
+with expected portable phases.

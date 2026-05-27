@@ -15,11 +15,52 @@ jobs:
         with:
           python-version: "3.12"
       - name: Validate JSON
-        run: python3 -m json.tool schemas/v0.1/promotion.schema.json >/dev/null
+        run: |
+          for schema in schemas/v0.1/*.json; do
+            python3 -m json.tool "$schema" >/dev/null
+          done
       - name: Install validators
         run: python3 -m pip install jsonschema pyyaml
       - name: Validate examples against schema
-        run: python3 scripts/validate-example.py schemas/v0.1/promotion.schema.json examples/hello-promotion.yaml
+        run: |
+          python3 scripts/validate-example.py schemas/v0.1/promotion.schema.json examples/00-hello-promotion.yaml
+          python3 scripts/validate-example.py schemas/v0.1/promotionrun.schema.json examples/01-promotion-run.yaml
+          python3 scripts/validate-example.py schemas/v0.1/evidence.schema.json examples/02-evidence.yaml
+          python3 scripts/validate-example.py schemas/v0.1/conformance-profile.schema.json examples/03-conformance-profile.yaml
+      - name: Verify format validation
+        run: |
+          cp examples/02-evidence.yaml /tmp/bad-evidence.yaml
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("/tmp/bad-evidence.yaml")
+          path.write_text(path.read_text().replace("https://example.com/evidence/security-scan", "not a uri"))
+          PY
+          if python3 scripts/validate-example.py schemas/v0.1/evidence.schema.json /tmp/bad-evidence.yaml; then
+            echo "format validation accepted an invalid URI" >&2
+            exit 1
+          fi
+          cp examples/01-promotion-run.yaml /tmp/bad-promotion-run.yaml
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("/tmp/bad-promotion-run.yaml")
+          path.write_text(path.read_text().replace("2026-05-27T17:00:00Z", "not a timestamp", 1))
+          PY
+          if python3 scripts/validate-example.py schemas/v0.1/promotionrun.schema.json /tmp/bad-promotion-run.yaml; then
+            echo "format validation accepted an invalid date-time" >&2
+            exit 1
+          fi
+      - name: Parse conformance scenarios
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml
+
+          for path in sorted(Path("conformance/scenarios").glob("*.yaml")):
+              with path.open() as f:
+                  yaml.safe_load(f)
+          PY
       - name: Check required files
         run: |
           test -f README.md
@@ -28,5 +69,16 @@ jobs:
           test -f GOVERNANCE.md
           test -f CODE_OF_CONDUCT.md
           test -f spec/pri-v0.1.md
-          test -f examples/hello-promotion.yaml
+          test -f spec/pri-runtime-v0.1.md
+          test -f spec/pri-bindings.md
+          test -f spec/pri-conformance.md
+          test -f examples/README.md
+          test -f examples/00-hello-promotion.yaml
+          test -f examples/01-promotion-run.yaml
+          test -f examples/02-evidence.yaml
+          test -f examples/03-conformance-profile.yaml
+          test -f schemas/v0.1/promotion.schema.json
+          test -f schemas/v0.1/promotionrun.schema.json
+          test -f schemas/v0.1/evidence.schema.json
+          test -f schemas/v0.1/conformance-profile.schema.json
           test -f scripts/validate-example.py

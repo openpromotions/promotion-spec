@@ -25,7 +25,14 @@ applications, provision infrastructure, or prescribe one delivery system.
 A Promotion is intent to advance one versioned artifact through a plan across
 explicit targets.
 
-Required fields:
+PRI documents use an `apiVersion` / `kind` / `metadata` envelope. The v0.1
+Promotion document requires:
+
+- `apiVersion`: PRI version for the document.
+- `kind`: `Promotion`.
+- `metadata.name`: stable promotion identifier.
+
+Required `spec` fields:
 
 - `unit`: logical workload or artifact stream name.
 - `version`: desired version or artifact reference.
@@ -33,8 +40,8 @@ Required fields:
 
 Optional fields:
 
-- `plan`: named rollout plan.
-- `annotations`: implementation-neutral metadata.
+- `spec.plan`: named rollout plan.
+- `metadata.annotations`: implementation-neutral metadata.
 
 ### Target
 
@@ -119,4 +126,3 @@ spec:
 | Runtime | Can persist promotion attempts, target results, and evidence. |
 
 The conformance suite is not implemented in v0.1.
-

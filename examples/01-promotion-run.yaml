@@ -1,0 +1,27 @@
+apiVersion: pri/v0.1
+kind: PromotionRun
+metadata:
+  name: checkout-v123-run-001
+spec:
+  promotionRef: checkout-v123
+status:
+  phase: Succeeded
+  implementationPhase: Complete
+  startedAt: "2026-05-27T17:00:00Z"
+  completedAt: "2026-05-27T17:03:00Z"
+  attempts:
+    - id: "1"
+      phase: Succeeded
+      implementationPhase: Complete
+      startedAt: "2026-05-27T17:00:00Z"
+      completedAt: "2026-05-27T17:03:00Z"
+  checkResults:
+    - check: security
+      phase: Succeeded
+      evidenceRefs:
+        - security-scan
+  targetResults:
+    - target: prod-eu
+      phase: Succeeded
+      evidenceRefs:
+        - security-scan

@@ -1,0 +1,14 @@
+apiVersion: pri/v0.1
+kind: ConformanceScenario
+metadata:
+  name: cancelled-run
+spec:
+  description: A running promotion can be cancelled and reaches a terminal Cancelled phase.
+  operations:
+    - ValidatePromotion
+    - CreatePromotionRun
+    - StartPromotionRun
+    - CancelPromotionRun
+    - GetPromotionRun
+  expected:
+    promotionRunPhase: Cancelled

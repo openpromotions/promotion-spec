@@ -1,0 +1,10 @@
+apiVersion: pri/v0.1
+kind: Evidence
+metadata:
+  name: security-scan
+spec:
+  type: verification
+  uri: https://example.com/evidence/security-scan
+  digest: sha256:def456
+  subjectRefs:
+    - checkout-v123

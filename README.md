@@ -8,7 +8,7 @@ Every delivery platform has to answer the same promotion questions:
 - what is being promoted;
 - which version or artifact is intended;
 - which targets are eligible;
-- which gates, approvals, and policies apply;
+- which checks, approvals, and policies apply;
 - what happened at runtime;
 - what evidence proves the decision and result.
 
@@ -34,7 +34,7 @@ PRI defines the portable shape of:
 - promotion intent;
 - targets and target metadata;
 - rollout plans and stage ordering;
-- gate and approval outcomes;
+- check and approval outcomes;
 - runtime status;
 - decision evidence;
 - conformance expectations.
@@ -57,8 +57,11 @@ metadata:
   name: checkout-v123
 spec:
   unit: checkout
-  version: v1.2.3
-  plan: progressive
+  artifacts:
+    - name: checkout
+      version: v1.2.3
+  plan:
+    ref: progressive
   targets:
     - name: prod-eu
       labels:
@@ -72,7 +75,7 @@ spec:
 The first draft centers on this runtime flow:
 
 ```text
-Promotion -> PromotionRun -> TargetResult -> Evidence
+Promotion -> PromotionRun -> CheckResult -> TargetResult -> Evidence
 ```
 
 ## Repository Status
@@ -88,8 +91,15 @@ implementations prove the contract.
 Current draft material:
 
 - [PRI v0.1 draft](spec/pri-v0.1.md)
+- [PRI Runtime v0.1](spec/pri-runtime-v0.1.md)
+- [PRI Bindings](spec/pri-bindings.md)
+- [PRI Conformance](spec/pri-conformance.md)
 - [Promotion JSON Schema](schemas/v0.1/promotion.schema.json)
-- [Hello Promotion example](examples/hello-promotion.yaml)
+- [PromotionRun JSON Schema](schemas/v0.1/promotionrun.schema.json)
+- [Evidence JSON Schema](schemas/v0.1/evidence.schema.json)
+- [ConformanceProfile JSON Schema](schemas/v0.1/conformance-profile.schema.json)
+- [Hello Promotion example](examples/00-hello-promotion.yaml)
+- [Examples guide](examples/README.md)
 - [Conformance notes](conformance/README.md)
 - [Governance](GOVERNANCE.md)
 - [Contributing](CONTRIBUTING.md)
@@ -108,5 +118,5 @@ Contributions are welcome in the form of:
 - pull requests that make the draft clearer and easier to implement.
 
 If you work on delivery platforms, CI/CD, GitOps, fleet management, compliance,
-security gates, or internal developer platforms, your feedback can materially
+security checks, or internal developer platforms, your feedback can materially
 improve the outcome of this specification.

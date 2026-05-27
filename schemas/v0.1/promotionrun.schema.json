@@ -1,0 +1,177 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:pri:schema:promotionrun:v0.1",
+  "title": "PRI PromotionRun",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec", "status"],
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "pri/v0.1"
+    },
+    "kind": {
+      "const": "PromotionRun"
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "spec": {
+      "type": "object",
+      "required": ["promotionRef"],
+      "additionalProperties": false,
+      "properties": {
+        "promotionRef": {
+          "$ref": "#/$defs/identifier"
+        }
+      }
+    },
+    "status": {
+      "type": "object",
+      "required": ["phase"],
+      "additionalProperties": false,
+      "properties": {
+        "phase": {
+          "$ref": "#/$defs/promotionRunPhase"
+        },
+        "implementationPhase": {
+          "type": "string",
+          "minLength": 1
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "attempts": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/attempt"
+          }
+        },
+        "checkResults": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/checkResult"
+          }
+        },
+        "targetResults": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/targetResult"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "metadata": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/identifier"
+        },
+        "labels": {
+          "$ref": "#/$defs/stringMap"
+        },
+        "annotations": {
+          "$ref": "#/$defs/stringMap"
+        }
+      }
+    },
+    "attempt": {
+      "type": "object",
+      "required": ["id", "startedAt"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "phase": {
+          "$ref": "#/$defs/promotionRunPhase"
+        },
+        "implementationPhase": {
+          "type": "string",
+          "minLength": 1
+        },
+        "startedAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "completedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "checkResult": {
+      "type": "object",
+      "required": ["check", "phase"],
+      "additionalProperties": false,
+      "properties": {
+        "check": {
+          "$ref": "#/$defs/identifier"
+        },
+        "phase": {
+          "type": "string",
+          "enum": ["Pending", "Running", "Succeeded", "Failed", "Skipped"]
+        },
+        "implementationPhase": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/identifierList"
+        }
+      }
+    },
+    "targetResult": {
+      "type": "object",
+      "required": ["target", "phase"],
+      "additionalProperties": false,
+      "properties": {
+        "target": {
+          "$ref": "#/$defs/identifier"
+        },
+        "phase": {
+          "type": "string",
+          "enum": ["Pending", "Delivering", "Verifying", "Succeeded", "Failed", "Skipped"]
+        },
+        "implementationPhase": {
+          "type": "string",
+          "minLength": 1
+        },
+        "evidenceRefs": {
+          "$ref": "#/$defs/identifierList"
+        }
+      }
+    },
+    "promotionRunPhase": {
+      "type": "string",
+      "enum": ["Pending", "Running", "Paused", "Succeeded", "Failed", "Cancelled"]
+    },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 253,
+      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+    },
+    "identifierList": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/identifier"
+      }
+    },
+    "stringMap": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}

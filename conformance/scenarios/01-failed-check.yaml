@@ -1,0 +1,17 @@
+apiVersion: pri/v0.1
+kind: ConformanceScenario
+metadata:
+  name: failed-check
+spec:
+  description: A required check fails before any target delivery succeeds.
+  operations:
+    - ValidatePromotion
+    - CreatePromotionRun
+    - StartPromotionRun
+    - RecordCheckResult
+    - GetPromotionRun
+  expected:
+    promotionRunPhase: Failed
+    checkResults:
+      security: Failed
+    targetResults: {}

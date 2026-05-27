@@ -1,0 +1,20 @@
+apiVersion: pri/v0.1
+kind: ConformanceScenario
+metadata:
+  name: happy-path
+spec:
+  description: A promotion validates, starts, records a successful check, records a successful target result, and succeeds.
+  operations:
+    - ValidatePromotion
+    - CreatePromotionRun
+    - StartPromotionRun
+    - RecordCheckResult
+    - RecordTargetResult
+    - RecordEvidence
+    - GetPromotionRun
+  expected:
+    promotionRunPhase: Succeeded
+    checkResults:
+      security: Succeeded
+    targetResults:
+      prod-eu: Succeeded

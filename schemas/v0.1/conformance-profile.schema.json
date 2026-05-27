@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:pri:schema:conformance-profile:v0.1",
+  "title": "PRI ConformanceProfile",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "pri/v0.1"
+    },
+    "kind": {
+      "const": "ConformanceProfile"
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "spec": {
+      "type": "object",
+      "required": ["priVersion", "adoptionMode", "conformance"],
+      "additionalProperties": false,
+      "properties": {
+        "priVersion": {
+          "const": "v0.1"
+        },
+        "adoptionMode": {
+          "type": "string",
+          "enum": ["native", "emission", "bridge"]
+        },
+        "conformance": {
+          "type": "object",
+          "required": ["document", "runtime", "decision"],
+          "additionalProperties": false,
+          "properties": {
+            "document": {
+              "type": "boolean"
+            },
+            "runtime": {
+              "type": "boolean"
+            },
+            "decision": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "metadata": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/identifier"
+        },
+        "labels": {
+          "$ref": "#/$defs/stringMap"
+        },
+        "annotations": {
+          "$ref": "#/$defs/stringMap"
+        }
+      }
+    },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 253,
+      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+    },
+    "stringMap": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}

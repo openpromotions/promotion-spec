@@ -72,6 +72,9 @@ jobs:
           test -f spec/pri-v0.1.md
           test -f spec/pri-runtime-v0.1.md
           test -f spec/pri-bindings.md
+          test -f spec/pri-opentelemetry.md
+          test -f spec/pri-semantic-conventions.md
+          test -f spec/pri-collector.md
           test -f spec/pri-conformance.md
           test -f examples/README.md
           test -f examples/00-hello-promotion.yaml

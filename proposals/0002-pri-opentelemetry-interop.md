@@ -25,6 +25,11 @@ Add three v0.1 documents:
 PRI remains a separate standard. OpenTelemetry is a binding and an
 implementation path for telemetry and collector infrastructure.
 
+The semantic convention prefix is `promotion.*`, not `pri.*`. This follows
+OpenTelemetry attribute naming practice where attributes describe the domain
+being observed, such as `http.*`, `db.*`, or `service.*`, rather than the name
+of the specification defining the attributes.
+
 ## Non-goals
 
 - Do not define a new PRI wire protocol.

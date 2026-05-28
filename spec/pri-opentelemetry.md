@@ -45,6 +45,8 @@ https://openpromotions.org/schemas/otel/pri/v0.1
 
 The schema URL identifies the version of the PRI OpenTelemetry semantic
 conventions used by emitted telemetry. It is not a PRI document `apiVersion`.
+It is also separate from any OpenTelemetry Resource or Instrumentation Scope
+schema URL a specific SDK or exporter may set for its own telemetry schema.
 
 ## Signal Mapping
 
@@ -84,10 +86,20 @@ Portable phase mapping:
 | `Cancelled` | UNSET with `promotion.run.phase=Cancelled` |
 | `Pending`, `Running`, `Paused`, `Delivering`, `Verifying`, `Skipped` | UNSET with phase attribute |
 
+Implementations MAY map `Cancelled` to ERROR when cancellation should count
+toward operational error-rate views, or keep it as UNSET when cancellation is a
+normal control-plane outcome. The chosen mapping should be documented by the
+implementation or binding.
+
 ## Logs And Events
 
 Point-in-time promotion observations SHOULD be represented as OpenTelemetry log
 records or events. The event name should be one of the PRI event names below.
+
+In this binding, references to events mean OpenTelemetry log records that carry
+an event name attribute. Implementations should prefer log records for
+point-in-time promotion observations unless their OpenTelemetry SDK exposes a
+dedicated event API with equivalent log-record semantics.
 
 | Event name | Meaning |
 |---|---|

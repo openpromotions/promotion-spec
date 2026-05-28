@@ -6,6 +6,7 @@ normative specification documents live in [../spec](../spec/).
 | Document | Purpose |
 |---|---|
 | [Architecture boundaries](architecture-boundaries.md) | Defines what belongs to PRI core and what belongs to implementation-specific integration. |
+| [Tool integration guide](tool-integration.md) | Explains how existing tools validate, emit, consume, bridge, and claim conformance with PRI. |
 | [CNCF path](cncf-path.md) | Describes the project practices and maturity milestones needed before any CNCF discussion. |
 
 ## Reading Order
@@ -18,7 +19,9 @@ For a first review:
    semantics.
 4. Read [Architecture boundaries](architecture-boundaries.md) to understand
    how bindings and external tools fit around the core.
-5. Validate the examples with `python scripts/validate-all.py`.
+5. Read [Tool integration guide](tool-integration.md) to understand how tools
+   consume and emit PRI.
+6. Validate the examples with `python scripts/validate-all.py`.
 
 ## Public Positioning
 

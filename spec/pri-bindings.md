@@ -41,6 +41,11 @@ Every binding document should include:
 A Binding document records a machine-readable summary of a binding. It is not a
 core Promotion object and does not make the binding mandatory.
 
+Tools use Binding documents to explain how they consume or emit PRI. A binding
+should make clear whether the tool validates PRI input, emits PRI from native
+state, consumes `Promotion` intent, bridges PRI to another API, or only supports
+a subset of the contract.
+
 Required fields:
 
 - `apiVersion`: `pri/v0.1`.

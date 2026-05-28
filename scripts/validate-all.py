@@ -29,6 +29,7 @@ REQUIRED_FILES = [
     "CODE_OF_CONDUCT.md",
     "docs/README.md",
     "docs/architecture-boundaries.md",
+    "docs/tool-integration.md",
     "docs/cncf-path.md",
     "spec/pri-v0.1.md",
     "spec/pri-runtime-v0.1.md",

@@ -34,6 +34,11 @@ document MUST contain the required PRI fields and MUST use the portable PRI
 phase values. Native implementation values can be preserved in explicit
 implementation-specific fields where defined.
 
+PRI documents are consumed as a contract. A tool may validate them, emit them
+from native state, consume them as intent, or bridge them to another API. PRI
+does not require the tool to use a particular runtime, controller, policy
+agent, storage backend, or delivery engine.
+
 ## Document Envelope
 
 PRI documents use an `apiVersion` / `kind` / `metadata` envelope. The v0.1

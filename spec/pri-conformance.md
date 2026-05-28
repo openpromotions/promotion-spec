@@ -29,6 +29,11 @@ records without restructuring around PRI as their native model.
 A ConformanceProfile records the supported PRI version, adoption mode, and
 conformance levels for an implementation.
 
+Conformance is a claim about a tool's PRI behavior. It does not imply that the
+tool is a PRI-specific runtime. Existing release, deployment, GitOps, approval,
+policy, and audit systems can publish ConformanceProfiles for the parts of PRI
+they consume or emit.
+
 ```yaml
 apiVersion: pri/v0.1
 kind: ConformanceProfile

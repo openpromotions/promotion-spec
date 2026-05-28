@@ -57,3 +57,10 @@ to Kubernetes, GitOps, OCI, cloud, or any one delivery platform.
 Bindings and conformance records are separate from promotions so existing tools
 can adopt PRI incrementally. A tool can start by emitting `PromotionRun` and
 `Evidence` records before it consumes `Promotion` intent.
+
+## Tool Consumption Example
+
+A tool that consumes `00-hello-promotion.yaml` should validate it, translate
+`spec.targets[]`, `spec.checks[]`, and `delivery.ref` into its native execution
+model, then emit a `PromotionRun` like `01-promotion-run.yaml`. Evidence
+produced during checks or delivery can be emitted as `02-evidence.yaml`.

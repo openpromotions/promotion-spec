@@ -71,3 +71,17 @@ for its claimed level:
 
 Future versions can add an executable test harness and signed profiles after
 multiple independent implementations exercise the current model.
+
+## Tool Consumption Expectations
+
+A conforming tool does not need to be a new runtime. It can be an existing
+release, deployment, GitOps, approval, policy, or audit system that consumes or
+emits PRI records.
+
+At minimum, a tool should make clear whether it:
+
+- validates PRI documents;
+- emits PRI records from native state;
+- consumes `Promotion` intent;
+- bridges PRI to and from another API;
+- records evidence for checks, approvals, and target results.

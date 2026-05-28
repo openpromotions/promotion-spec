@@ -1,0 +1,32 @@
+apiVersion: pri/v0.1
+kind: Binding
+metadata:
+  name: example-platform
+spec:
+  category: platform
+  summary: Example platform binding shape.
+  priVersions:
+    - v0.1
+  adoptionModes:
+    - emission
+    - bridge
+  roundTrip: lossy
+  mappings:
+    objects:
+      - pri: Promotion
+        external: ExampleRelease
+      - pri: PromotionRun
+        external: ExampleReleaseStatus
+    fields:
+      - pri: spec.artifacts
+        external: release.inputs
+      - pri: spec.targets
+        external: release.destinations
+  requiredConfiguration:
+    - name: endpoint
+      description: API endpoint for the external system.
+  unsupported:
+    - spec.plan
+  references:
+    - title: Example external reference
+      uri: https://example.com/spec

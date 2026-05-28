@@ -19,4 +19,5 @@ python3 scripts/validate-example.py schemas/v0.1/promotion.schema.json examples/
 python3 scripts/validate-example.py schemas/v0.1/promotionrun.schema.json examples/01-promotion-run.yaml
 python3 scripts/validate-example.py schemas/v0.1/evidence.schema.json examples/02-evidence.yaml
 python3 scripts/validate-example.py schemas/v0.1/conformance-profile.schema.json examples/03-conformance-profile.yaml
+python3 scripts/validate-example.py schemas/v0.1/binding.schema.json examples/04-binding.yaml
 ```

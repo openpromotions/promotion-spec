@@ -1,14 +1,17 @@
-# PRI v0.1 Draft
+# PRI v0.1
 
 PRI, the Promotion Runtime Interface, defines a portable promotion contract for
 advancing versioned artifacts across explicit targets with auditable decisions.
 
-This draft defines the core document model. Runtime semantics, bindings, and
-conformance are defined in companion documents:
+This specification defines the core document model. Runtime semantics,
+bindings, and conformance are defined in companion documents:
 
 - [PRI Runtime v0.1](pri-runtime-v0.1.md)
 - [PRI Bindings](pri-bindings.md)
 - [PRI Conformance](pri-conformance.md)
+
+The v0.1 contract is governed by the
+[stability policy](../docs/stability-policy.md).
 
 ## Goals
 
@@ -20,9 +23,9 @@ PRI should let compatible systems answer the same core question:
 ## Non-goals
 
 PRI does not manage fleet inventory, join clusters, reconcile applications,
-provision infrastructure, prescribe one delivery system, or require a
-particular transport, controller model, RPC protocol, CLI, storage backend, or
-implementation language.
+provision infrastructure, prescribe one delivery system, require Kubernetes, or
+require a particular transport, controller model, RPC protocol, CLI, storage
+backend, or implementation language.
 
 ## Core Rule
 

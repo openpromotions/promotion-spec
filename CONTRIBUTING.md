@@ -7,6 +7,11 @@ PRI is early. Contributions should start with issues or small pull requests.
 Large contract changes should be proposed as a short RFC in `proposals/` before
 implementation.
 
+Before proposing a contract change, read the
+[stability policy](docs/stability-policy.md). Backward-compatible clarifications
+can stay in `v0.1`; breaking changes require a new minor version such as
+`v0.2`.
+
 ## Validation
 
 Validate the repository with:

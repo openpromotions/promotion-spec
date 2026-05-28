@@ -1,8 +1,8 @@
 # PRI Architecture Boundaries
 
 PRI is a promotion contract first. It can interoperate with delivery, GitOps,
-pipeline, compliance, storage, and internal platform systems, but those systems
-do not define the PRI core.
+standalone VM deployment, pipeline, compliance, storage, and internal platform
+systems, but those systems do not define the PRI core.
 
 ## Layers
 
@@ -17,8 +17,8 @@ do not define the PRI core.
 
 ## Boundary Rules
 
-1. Core PRI schemas MUST NOT require Kubernetes, GitOps, OCI, CI/CD, cloud, or
-   vendor-specific fields.
+1. Core PRI schemas MUST NOT require Kubernetes, GitOps, OCI, CI/CD, VM, cloud,
+   or vendor-specific fields.
 2. Core PRI runtime semantics define operations by meaning, not by transport,
    API, RPC, controller, CLI, or workflow engine.
 3. PRI may record policy checks and outcomes, but policy evaluation belongs to

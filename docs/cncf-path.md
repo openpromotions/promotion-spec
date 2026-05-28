@@ -18,11 +18,11 @@ The project should not apply to CNCF until the following are true:
 - Public RFC process.
 - Documented maintainer path.
 - Code of Conduct.
-- Conformance suite before any stable claim.
+- Compatibility policy before any stable claim.
+- Conformance suite before any mature/stable ecosystem claim.
 
 ## Positioning
 
 PRI should be presented as an interface, similar in spirit to cloud-native
 interfaces such as CRI, CNI, CSI, and CloudEvents. PRI is not a replacement for
-delivery, pipeline, fleet, GitOps, or cloud deployment platforms.
-
+delivery, pipeline, fleet, GitOps, VM deployment, or cloud deployment platforms.

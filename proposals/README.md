@@ -6,11 +6,14 @@ discussion public before the specification changes.
 Small editorial fixes can go directly to pull requests. Larger changes should
 start with a short proposal.
 
+All proposals must follow the [stability policy](../docs/stability-policy.md).
+Breaking changes to v0.1 require a new minor version such as `v0.2`.
+
 ## Current Proposals
 
 | Proposal | Status | Purpose |
 |---|---|---|
-| `0001-pri-v0.1-runtime-contract.md` | Accepted in v0.1 draft | Defines the runtime object set, semantic operations, state transitions, and retry behavior. |
+| `0001-pri-v0.1-runtime-contract.md` | Accepted in v0.1 | Defines the runtime object set, semantic operations, state transitions, and retry behavior. |
 
 ## Proposal Template
 

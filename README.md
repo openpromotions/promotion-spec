@@ -4,15 +4,16 @@ The Promotion Runtime Interface (PRI) is an open specification for safely
 advancing versioned artifacts across explicit targets with auditable decisions.
 
 PRI defines a shared promotion contract. It lets CI/CD, GitOps, fleet,
-compliance, release, and internal platform systems exchange promotion intent,
-runtime status, and evidence without adopting the same implementation.
+standalone VM deployment, compliance, release, and internal platform systems
+exchange promotion intent, runtime status, and evidence without adopting the
+same implementation.
 
 ## Status
 
-PRI v0.1 is a public draft for review and early implementation experiments.
-The repository is ready for public discussion, examples, and prototype
-adapters. The contract is intentionally small, but breaking changes can still
-happen before a stable release.
+PRI v0.1 is a stable public contract for review and early implementation.
+The object contract, required fields, portable phase values, and semantic
+operation meanings are covered by the [stability policy](docs/stability-policy.md).
+Breaking contract changes require a new minor version such as `v0.2`.
 
 ## Why PRI Exists
 
@@ -42,9 +43,9 @@ which target is it moving to?
 ```
 
 That tiny contract gives different tools a common record to validate, store,
-share, audit, and translate. A CI workflow, GitOps controller, release tool,
-approval system, or internal platform can all describe the same promotion
-without sharing the same runtime or wire format.
+share, audit, and translate. A CI workflow, GitOps controller, VM deployment
+tool, release tool, approval system, or internal platform can all describe the
+same promotion without sharing the same runtime or wire format.
 
 Once the basic intent is portable, tools can add runtime status and evidence:
 
@@ -74,7 +75,7 @@ PRI documents and runtime semantics
 
 | Layer | What PRI defines | What stays outside core |
 |---|---|---|
-| Format | `Promotion`, `PromotionRun`, `Evidence`, `ConformanceProfile`, `Binding` documents and JSON Schemas | External storage, API envelopes, database schemas |
+| Object contract | `Promotion`, `PromotionRun`, `Evidence`, `ConformanceProfile`, `Binding` documents and JSON Schemas | External storage, API envelopes, database schemas |
 | Runtime | Semantic operations and portable state transitions | Required CLI, RPC, controller, workflow engine, or transport |
 | Policy | Check references, required/advisory behavior, and result records | Policy language, policy agent, approval system, or rules engine |
 | Bindings | How external systems map to PRI, including adoption mode and round-trip behavior | Tool-specific implementation details |
@@ -185,7 +186,7 @@ The same validation runs in GitHub Actions.
 - Not a policy agent.
 - Not a cloud provisioning API.
 - Not a telemetry pipeline.
-- Not tied to Kubernetes, OCI, Git, CI/CD, or any one runtime.
+- Not tied to Kubernetes, OCI, Git, CI/CD, VMs, cloud, or any one runtime.
 
 ## Adoption Modes
 
@@ -204,7 +205,7 @@ portable promotion records before they consume PRI as input.
 
 Core contract:
 
-- [PRI v0.1 draft](spec/pri-v0.1.md)
+- [PRI v0.1](spec/pri-v0.1.md)
 - [PRI Runtime v0.1](spec/pri-runtime-v0.1.md)
 - [PRI Bindings](spec/pri-bindings.md)
 - [PRI Conformance](spec/pri-conformance.md)
@@ -212,12 +213,14 @@ Core contract:
 - [PromotionRun JSON Schema](schemas/v0.1/promotionrun.schema.json)
 - [Evidence JSON Schema](schemas/v0.1/evidence.schema.json)
 - [ConformanceProfile JSON Schema](schemas/v0.1/conformance-profile.schema.json)
+- [ConformanceScenario JSON Schema](schemas/v0.1/conformance-scenario.schema.json)
 - [Binding JSON Schema](schemas/v0.1/binding.schema.json)
 
 Adoption and interoperability:
 
 - [Architecture boundaries](docs/architecture-boundaries.md)
 - [Tool integration guide](docs/tool-integration.md)
+- [Stability policy](docs/stability-policy.md)
 - [CNCF path](docs/cncf-path.md)
 
 Examples and project process:
@@ -231,7 +234,8 @@ Examples and project process:
 ## Contributing
 
 Promotion interoperability will only be useful if it reflects real-world
-release, compliance, fleet, GitOps, pipeline, and platform needs.
+release, compliance, fleet, GitOps, VM deployment, pipeline, and platform
+needs.
 
 Contributions are welcome in the form of:
 
@@ -240,8 +244,8 @@ Contributions are welcome in the form of:
 - schema and terminology improvements;
 - binding proposals for existing ecosystems;
 - conformance ideas;
-- pull requests that make the draft clearer and easier to implement.
+- pull requests that make the specification clearer and easier to implement.
 
-If you work on delivery platforms, CI/CD, GitOps, fleet management, compliance,
-security checks, or internal developer platforms, your feedback can materially
-improve the outcome of this specification.
+If you work on delivery platforms, CI/CD, GitOps, VM deployment, fleet
+management, compliance, security checks, or internal developer platforms, your
+feedback can materially improve the outcome of this specification.

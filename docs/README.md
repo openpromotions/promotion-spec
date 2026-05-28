@@ -7,6 +7,7 @@ normative specification documents live in [../spec](../spec/).
 |---|---|
 | [Architecture boundaries](architecture-boundaries.md) | Defines what belongs to PRI core and what belongs to implementation-specific integration. |
 | [Tool integration guide](tool-integration.md) | Explains how existing tools validate, emit, consume, bridge, and claim conformance with PRI. |
+| [Stability policy](stability-policy.md) | Defines v0.1 compatibility guarantees, breaking-change rules, extension points, and release criteria. |
 | [CNCF path](cncf-path.md) | Describes the project practices and maturity milestones needed before any CNCF discussion. |
 
 ## Reading Order
@@ -21,10 +22,12 @@ For a first review:
    how bindings and external tools fit around the core.
 5. Read [Tool integration guide](tool-integration.md) to understand how tools
    consume and emit PRI.
-6. Validate the examples with `python scripts/validate-all.py`.
+6. Read [Stability policy](stability-policy.md) before proposing contract
+   changes.
+7. Validate the examples with `python scripts/validate-all.py`.
 
 ## Public Positioning
 
 PRI should be presented as an interoperability interface for promotion state.
-It is not a fleet manager, GitOps reconciler, pipeline engine, cloud API, or
-telemetry pipeline.
+It is not a fleet manager, GitOps reconciler, VM deployment tool, pipeline
+engine, cloud API, or telemetry pipeline.

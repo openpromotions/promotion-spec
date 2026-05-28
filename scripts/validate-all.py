@@ -31,6 +31,7 @@ REQUIRED_FILES = [
     "docs/README.md",
     "docs/architecture-boundaries.md",
     "docs/tool-integration.md",
+    "docs/stability-policy.md",
     "docs/cncf-path.md",
     "spec/pri-v0.1.md",
     "spec/pri-runtime-v0.1.md",
@@ -47,6 +48,7 @@ REQUIRED_FILES = [
     "schemas/v0.1/promotionrun.schema.json",
     "schemas/v0.1/evidence.schema.json",
     "schemas/v0.1/conformance-profile.schema.json",
+    "schemas/v0.1/conformance-scenario.schema.json",
     "schemas/v0.1/binding.schema.json",
     "scripts/validate-example.py",
     "scripts/validate-all.py",
@@ -109,7 +111,7 @@ def check_examples() -> list[str]:
     return messages
 
 
-def check_negative_formats() -> list[str]:
+def check_negative_validation() -> list[str]:
     messages = []
     with tempfile.TemporaryDirectory() as tmp:
         tmpdir = Path(tmp)
@@ -132,16 +134,30 @@ def check_negative_formats() -> list[str]:
         if not validate_document(ROOT / "schemas/v0.1/promotionrun.schema.json", bad_run):
             messages.append("negative check failed: invalid date-time was accepted")
 
+        bad_scenario = tmpdir / "bad-conformance-scenario.yaml"
+        bad_scenario.write_text(
+            (ROOT / "conformance/scenarios/00-happy-path.yaml")
+            .read_text()
+            .replace("ValidatePromotion", "TeleportPromotion", 1)
+        )
+        if not validate_document(
+            ROOT / "schemas/v0.1/conformance-scenario.schema.json", bad_scenario
+        ):
+            messages.append("negative check failed: invalid conformance operation was accepted")
+
     return messages
 
 
 def check_conformance_scenarios() -> list[str]:
     messages = []
+    schema_path = ROOT / "schemas/v0.1/conformance-scenario.schema.json"
     for path in sorted((ROOT / "conformance/scenarios").glob("*.yaml")):
         try:
             yaml.safe_load(path.read_text())
         except yaml.YAMLError as exc:
             messages.append(f"{path.relative_to(ROOT)}: invalid YAML: {exc}")
+            continue
+        messages.extend(validate_document(schema_path, path))
     return messages
 
 
@@ -157,7 +173,7 @@ def main() -> int:
     checks = [
         ("JSON schemas", check_json_schemas),
         ("examples", check_examples),
-        ("negative format checks", check_negative_formats),
+        ("negative validation checks", check_negative_validation),
         ("conformance scenarios", check_conformance_scenarios),
         ("required files", check_required_files),
     ]

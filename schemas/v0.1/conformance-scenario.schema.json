@@ -1,0 +1,117 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:pri:schema:conformance-scenario:v0.1",
+  "title": "PRI ConformanceScenario",
+  "description": "Scenario fixture for exercising semantic PRI runtime operations and expected portable outcomes.",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "additionalProperties": false,
+  "properties": {
+    "apiVersion": {
+      "const": "pri/v0.1"
+    },
+    "kind": {
+      "const": "ConformanceScenario"
+    },
+    "metadata": {
+      "$ref": "#/$defs/metadata"
+    },
+    "spec": {
+      "type": "object",
+      "required": ["description", "operations", "expected"],
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string",
+          "minLength": 1
+        },
+        "operations": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/operation"
+          }
+        },
+        "expected": {
+          "type": "object",
+          "required": ["promotionRunPhase"],
+          "additionalProperties": false,
+          "properties": {
+            "promotionRunPhase": {
+              "$ref": "#/$defs/promotionRunPhase"
+            },
+            "checkResults": {
+              "$ref": "#/$defs/checkResultMap"
+            },
+            "targetResults": {
+              "$ref": "#/$defs/targetResultMap"
+            }
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "metadata": {
+      "type": "object",
+      "required": ["name"],
+      "additionalProperties": true,
+      "properties": {
+        "name": {
+          "$ref": "#/$defs/identifier"
+        },
+        "labels": {
+          "$ref": "#/$defs/stringMap"
+        },
+        "annotations": {
+          "$ref": "#/$defs/stringMap"
+        }
+      }
+    },
+    "operation": {
+      "type": "string",
+      "enum": [
+        "ValidatePromotion",
+        "CreatePromotionRun",
+        "StartPromotionRun",
+        "GetPromotionRun",
+        "CancelPromotionRun",
+        "RetryPromotionRun",
+        "RecordCheckResult",
+        "RecordTargetResult",
+        "RecordEvidence",
+        "GetRuntimeInfo"
+      ]
+    },
+    "promotionRunPhase": {
+      "type": "string",
+      "enum": ["Pending", "Running", "Paused", "Succeeded", "Failed", "Cancelled"]
+    },
+    "checkResultMap": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["Pending", "Running", "Succeeded", "Failed", "Skipped"]
+      }
+    },
+    "targetResultMap": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["Pending", "Running", "Delivering", "Verifying", "Succeeded", "Failed", "Skipped"]
+      }
+    },
+    "identifier": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 253,
+      "pattern": "^[a-z0-9]([-a-z0-9]*[a-z0-9])?(\\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$"
+    },
+    "stringMap": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -54,8 +54,8 @@ python scripts/validate-all.py
 
 - JSON schema syntax;
 - all bundled examples against their schemas;
-- negative URI and timestamp validation;
-- conformance scenario YAML parsing;
+- negative URI, timestamp, and semantic-operation validation;
+- conformance scenario YAML parsing and schema validation;
 - required public launch files.
 
 ## What An Implementation Should Prove

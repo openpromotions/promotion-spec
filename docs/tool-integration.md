@@ -39,7 +39,7 @@ serialization if the required fields and semantics are preserved.
 |---|---|
 | Release request, deployment request, promotion request | `Promotion` |
 | Run, execution, rollout, sync, deployment attempt | `PromotionRun` |
-| Stage, environment, cluster, region, account | `Target` or `TargetResult` |
+| Stage, environment, cluster, VM group, host group, region, account | `Target` or `TargetResult` |
 | Approval, policy, test, scan, quality gate | `Check` or `CheckResult` |
 | Artifact, image, chart, package, manifest bundle | `Artifact` |
 | Audit record, scan result, approval link, report | `Evidence` |
@@ -104,3 +104,22 @@ Tools should follow these rules when producing PRI:
 
 The result is interoperability without requiring every tool to share the same
 runtime, policy language, storage backend, or delivery engine.
+
+## Standalone VM Deployments
+
+PRI is not Kubernetes-specific. A VM deployment tool can consume or emit PRI the
+same way a GitOps or platform tool can.
+
+Example mapping:
+
+| VM deployment concept | PRI object or field |
+|---|---|
+| Application or service | `Promotion.spec.unit` |
+| Package, image, archive, or build ID | `Promotion.spec.artifacts[]` |
+| Host, host group, environment, or region | `Promotion.spec.targets[]` |
+| Deployment job or run ID | `PromotionRun.metadata.name` |
+| Preflight check, health check, approval | `CheckResult` |
+| Deployment log, approval URL, scan report | `Evidence` |
+
+The VM-specific details stay in the VM deployment system or in a `Binding`
+document. PRI only standardizes the portable promotion record.

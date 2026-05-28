@@ -1,13 +1,13 @@
-# PRI OpenTelemetry Semantic Conventions v0.1
+# PRI Signal Semantic Conventions v0.1
 
-PRI semantic conventions define common OpenTelemetry attribute names for
-promotion signals, records, bindings, and collectors. They make promotion data
-queryable across tools without forcing those tools to use the same promotion
-runtime.
+PRI signal semantic conventions define common attribute names for promotion
+signals, records, bindings, and collectors. They make promotion data queryable
+across tools without forcing those tools to use the same promotion runtime.
 
-These conventions are an OpenPromotions binding for OpenTelemetry. They are not
-part of upstream OpenTelemetry semantic conventions unless accepted there in the
-future.
+These conventions intentionally follow OpenTelemetry-style attribute naming so
+the same data can be carried as OpenTelemetry spans, log records, and metrics.
+They are defined by OpenPromotions, are not part of the PRI core schema, and are
+not upstream OpenTelemetry semantic conventions.
 
 The convention namespace is intentionally plain:
 
@@ -19,7 +19,7 @@ The convention namespace is intentionally plain:
 - `delivery.*` for delivery handoff.
 - `binding.*` for binding metadata.
 - `source.*` for native source systems and adapters.
-- `collector.*` for collector pipeline metadata.
+- `collector.*` for generic collector pipeline metadata.
 
 ## Requirement Levels
 
@@ -121,4 +121,6 @@ The convention namespace is intentionally plain:
 
 Attribute names are lowercase, dot-separated, and stable once published.
 Technology-specific attributes belong in binding documents, not in the core PRI
-semantic conventions.
+semantic conventions. OpenTelemetry compatibility bindings may map these
+attributes into OTel signals, but PRI core documents do not import OTel semantic
+convention groups.

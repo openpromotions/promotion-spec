@@ -8,21 +8,22 @@ many backends. At the same time, promotion is not only telemetry. Promotions
 have durable intent, current runtime state, cancellation, retry, and auditable
 evidence relationships.
 
-PRI therefore needs OpenTelemetry interoperability without becoming an
-OpenTelemetry extension or replacing the PRI data model.
+PRI therefore needs OpenTelemetry interoperability and architectural leverage
+without becoming an OpenTelemetry extension or replacing the PRI data model.
 
 ## Proposal
 
 Add three v0.1 documents:
 
-- `spec/pri-opentelemetry.md`: maps PRI records to OpenTelemetry traces,
-  logs/events, metrics, schema URL, resources, scope, and correlation.
-- `spec/pri-semantic-conventions.md`: defines OpenPromotions semantic
-  attributes for promotion telemetry.
+- `spec/pri-opentelemetry.md`: maps PRI records to OpenTelemetry-compatible
+  traces, logs/events, metrics, schema URL, resources, scope, and correlation.
+- `spec/pri-semantic-conventions.md`: defines OpenPromotions signal semantic
+  attributes for promotion observations.
 - `spec/pri-collector.md`: defines a collector architecture aligned with
-  OpenTelemetry Collector receivers, processors, and exporters.
+  receiver/processor/exporter pipelines and compatible with OpenTelemetry
+  Collector implementations.
 
-PRI remains a separate standard. OpenTelemetry is a binding and an
+PRI remains a separate standard. OpenTelemetry is one optional binding and one
 implementation path for telemetry and collector infrastructure.
 
 The semantic convention prefix is `promotion.*`, not `pri.*`. This follows
@@ -35,6 +36,7 @@ of the specification defining the attributes.
 - Do not define a new PRI wire protocol.
 - Do not define a new collector runtime.
 - Do not require OpenTelemetry for PRI core conformance.
+- Do not make OpenTelemetry concepts normative in PRI core schemas.
 - Do not claim upstream OpenTelemetry semantic-convention status.
 - Do not place technology-specific tool mappings in `promotion-spec`.
 
@@ -47,15 +49,19 @@ interoperability layer.
 
 - Extend OpenTelemetry directly. Rejected because promotion has control-plane
   state and lifecycle operations that are outside telemetry's role.
+- Make OpenTelemetry the core PRI signal model. Rejected because PRI needs a
+  technology-neutral promotion contract first, with telemetry compatibility as
+  an optional binding.
 - Invent a PRI telemetry protocol. Rejected because OTLP and the OpenTelemetry
   Collector already provide mature telemetry transport and pipeline mechanics.
 - Keep only descriptive Binding documents. Rejected as insufficient for the
-  OpenTelemetry-for-promotions vision because semantic attributes and collector
+  promotion interoperability vision because semantic attributes and collector
   architecture need explicit guidance.
 
 ## Open Questions
 
 - Which promotion metrics should become stable first.
-- Whether the OpenPromotions semantic conventions should eventually be proposed
-  upstream after independent implementations exist.
+- Whether the OpenPromotions semantic conventions should remain only in the PRI
+  binding layer or later be mirrored in an external OTel-specific package after
+  implementation experience.
 - Whether a future PRI runtime protocol is needed for control-plane operations.

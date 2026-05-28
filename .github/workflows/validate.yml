@@ -76,6 +76,7 @@ jobs:
           test -f spec/pri-semantic-conventions.md
           test -f spec/pri-collector.md
           test -f spec/pri-conformance.md
+          test -f docs/architecture-boundaries.md
           test -f examples/README.md
           test -f examples/00-hello-promotion.yaml
           test -f examples/01-promotion-run.yaml

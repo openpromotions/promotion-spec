@@ -43,6 +43,8 @@ core Promotion object and does not make the binding mandatory.
 
 Required fields:
 
+- `apiVersion`: `pri/v0.1`.
+- `kind`: `Binding`.
 - `metadata.name`: stable binding identifier.
 - `spec.category`: one of `platform`, `event`, `evidence`, `artifact`, or
   `storage`.

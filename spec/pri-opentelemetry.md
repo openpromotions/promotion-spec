@@ -1,11 +1,16 @@
-# PRI OpenTelemetry Binding v0.1
+# PRI OpenTelemetry Compatibility Binding v0.1
 
-PRI can be represented through OpenTelemetry without defining a new telemetry
-wire protocol. PRI remains the promotion domain model. OpenTelemetry provides
-the signal pipeline, semantic attributes, collector architecture, and optional
-OTLP transport for telemetry use cases.
+PRI has its own document format, runtime semantics, binding model, and
+conformance model. This document defines how PRI observations can be exported in
+an OpenTelemetry-compatible form without making OpenTelemetry part of the PRI
+core contract.
 
-This document defines the v0.1 mapping from PRI records to OpenTelemetry-style
+The binding reuses proven OpenTelemetry patterns: traces, log records, metrics,
+semantic attribute naming, schema URLs, and receiver/processor/exporter
+pipelines. Those patterns are compatibility surfaces and implementation
+shortcuts, not PRI concepts.
+
+This document defines the v0.1 mapping from PRI records to OpenTelemetry
 signals. It is a binding, not a replacement for the core PRI records.
 
 ## Relationship To OpenTelemetry
@@ -25,15 +30,21 @@ The OpenTelemetry binding is therefore one interoperability path. It lets
 promotion observations flow through OpenTelemetry traces, logs/events, metrics,
 OTLP, and Collector pipelines while PRI remains the promotion contract.
 
+OpenTelemetry terms MUST NOT appear in PRI core schemas unless they are part of
+an explicit optional binding. Core PRI documents remain valid and complete
+without this binding.
+
 ## Design Principles
 
 1. PRI records remain the source of truth for promotion semantics.
-2. OpenTelemetry carries promotion observations as traces, logs/events, and
-   metrics.
+2. When this binding is used, OpenTelemetry carries promotion observations as
+   traces, logs/events, and metrics.
 3. PRI does not require OpenTelemetry for core conformance.
-4. PRI does not define a new wire protocol when OpenTelemetry OTLP can carry
-   telemetry signals.
-5. Technology-specific mappings belong in binding documents.
+4. PRI does not define a new telemetry wire protocol in v0.1; OTLP MAY carry
+   the OpenTelemetry representation of PRI observations.
+5. The receiver/processor/exporter collector shape is an architectural pattern,
+   not a required OpenTelemetry runtime.
+6. Technology-specific mappings belong in binding documents.
 
 ## Schema URL
 
@@ -43,12 +54,13 @@ OpenTelemetry exporters that support schema URLs SHOULD use:
 https://openpromotions.org/schemas/otel/pri/v0.1
 ```
 
-The schema URL identifies the version of the PRI OpenTelemetry semantic
-conventions used by emitted telemetry. It is not a PRI document `apiVersion`.
-It is also separate from any OpenTelemetry Resource or Instrumentation Scope
-schema URL a specific SDK or exporter may set for its own telemetry schema.
+The schema URL identifies the version of the PRI signal semantic conventions
+used by emitted OpenTelemetry-compatible telemetry. It is not a PRI document
+`apiVersion`. It is also separate from any OpenTelemetry Resource or
+Instrumentation Scope schema URL a specific SDK or exporter may set for its own
+telemetry schema.
 
-## Signal Mapping
+## Compatibility Signal Mapping
 
 | PRI concept | OpenTelemetry signal | Purpose |
 |---|---|---|
@@ -139,9 +151,9 @@ Metric labels should use PRI semantic conventions.
 
 ## Resource And Scope
 
-OpenTelemetry Resource attributes describe the system that produced or observed
-the signal. Instrumentation scope describes the adapter, receiver, runtime, or
-collector component that emitted it.
+When emitting OpenTelemetry signals, Resource attributes describe the system
+that produced or observed the signal. Instrumentation scope describes the
+adapter, receiver, runtime, or collector component that emitted it.
 
 Recommended resource attributes:
 
@@ -174,15 +186,18 @@ attributes.
 
 ## Collector Use
 
-A promotion collector SHOULD be implemented as OpenTelemetry Collector
-components or an OpenTelemetry Collector distribution where practical:
+A promotion collector can be implemented as PRI-native components, as
+OpenTelemetry Collector components, or as an OpenTelemetry Collector
+distribution where practical. The normative PRI idea is the component role, not
+the underlying collector runtime:
 
 - receivers ingest native promotion data or PRI records;
 - processors validate, normalize, enrich, redact, deduplicate, or correlate;
-- exporters send OTel signals, PRI records, or both.
+- exporters send OpenTelemetry-compatible signals, PRI records, or both.
 
 This keeps the project aligned with the existing telemetry ecosystem instead of
-inventing a parallel collector protocol.
+inventing a parallel collector protocol, while preserving PRI as the promotion
+contract.
 
 ## Runtime Operations
 
@@ -193,6 +208,5 @@ replace the runtime API or state model.
 
 ## Stability
 
-This binding is experimental in v0.1. The OpenPromotions project may later
-propose these semantic conventions upstream if multiple independent
-implementations use them successfully.
+This binding is experimental in v0.1. Future versions may refine the mapping as
+multiple independent implementations prove which signal shapes are useful.

@@ -88,20 +88,24 @@ community later agrees otherwise.
 PRI is experimental. Breaking changes are expected while the first
 implementations prove the contract.
 
-Current draft material:
+Current core draft material:
 
 - [PRI v0.1 draft](spec/pri-v0.1.md)
 - [PRI Runtime v0.1](spec/pri-runtime-v0.1.md)
 - [PRI Bindings](spec/pri-bindings.md)
-- [PRI OpenTelemetry Binding](spec/pri-opentelemetry.md)
-- [PRI OpenTelemetry Semantic Conventions](spec/pri-semantic-conventions.md)
-- [PRI Collector Architecture](spec/pri-collector.md)
 - [PRI Conformance](spec/pri-conformance.md)
 - [Promotion JSON Schema](schemas/v0.1/promotion.schema.json)
 - [PromotionRun JSON Schema](schemas/v0.1/promotionrun.schema.json)
 - [Evidence JSON Schema](schemas/v0.1/evidence.schema.json)
 - [ConformanceProfile JSON Schema](schemas/v0.1/conformance-profile.schema.json)
 - [Binding JSON Schema](schemas/v0.1/binding.schema.json)
+
+Optional interoperability and adoption material:
+
+- [Architecture boundaries](docs/architecture-boundaries.md)
+- [PRI OpenTelemetry Compatibility Binding](spec/pri-opentelemetry.md)
+- [PRI Signal Semantic Conventions](spec/pri-semantic-conventions.md)
+- [PRI Collector Architecture](spec/pri-collector.md)
 - [Hello Promotion example](examples/00-hello-promotion.yaml)
 - [Examples guide](examples/README.md)
 - [Conformance notes](conformance/README.md)

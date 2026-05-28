@@ -98,6 +98,7 @@ Current draft material:
 - [PromotionRun JSON Schema](schemas/v0.1/promotionrun.schema.json)
 - [Evidence JSON Schema](schemas/v0.1/evidence.schema.json)
 - [ConformanceProfile JSON Schema](schemas/v0.1/conformance-profile.schema.json)
+- [Binding JSON Schema](schemas/v0.1/binding.schema.json)
 - [Hello Promotion example](examples/00-hello-promotion.yaml)
 - [Examples guide](examples/README.md)
 - [Conformance notes](conformance/README.md)

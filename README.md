@@ -73,6 +73,34 @@ Promotion -> PromotionRun -> CheckResult -> TargetResult -> Evidence
 - `TargetResult` records per-target delivery or verification outcomes.
 - `Evidence` records why a decision or result is trustworthy.
 
+## How Tools Use PRI
+
+PRI is consumed as documents and semantics, not as a required service.
+
+```text
+Native tool state
+        |
+        v
+validate / translate / emit / consume
+        |
+        v
+PRI Promotion, PromotionRun, Evidence, Binding, ConformanceProfile
+```
+
+A tool can adopt PRI in one or more ways:
+
+| Use | What the tool does |
+|---|---|
+| Validate | Accept PRI documents only when they pass the JSON Schemas and contract rules. |
+| Emit | Export `PromotionRun` and `Evidence` records from native release or deployment state. |
+| Consume | Read a `Promotion` document as intent, then record resulting `PromotionRun` status. |
+| Bridge | Translate between a native model and PRI while documenting lossless, lossy, or emission-only behavior. |
+| Claim conformance | Publish a `ConformanceProfile` that states supported PRI version, adoption mode, and conformance level. |
+
+Tools do not have to implement every PRI object on day one. An existing system
+can start by emitting portable `PromotionRun` and `Evidence` records. A deeper
+integration can later consume `Promotion` intent directly.
+
 ## Minimal Example
 
 ```yaml
@@ -160,6 +188,7 @@ Core contract:
 Adoption and interoperability:
 
 - [Architecture boundaries](docs/architecture-boundaries.md)
+- [Tool integration guide](docs/tool-integration.md)
 - [CNCF path](docs/cncf-path.md)
 
 Examples and project process:

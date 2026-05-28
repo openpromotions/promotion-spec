@@ -40,3 +40,18 @@ Promotion -> PromotionRun -> CheckResult -> TargetResult -> Evidence
 
 Implementations can expose those records through any platform shape they need.
 The portable contract is the document model, state model, and evidence model.
+
+## Tool Consumption Boundary
+
+Tools consume PRI by validating documents, translating native state, emitting
+portable records, or acting on `Promotion` intent. PRI does not prescribe the
+tool's controller, policy agent, storage backend, delivery engine, approval
+system, or API surface.
+
+The contract between PRI and a tool is:
+
+- input and output documents match the schemas;
+- required fields are present;
+- portable phase values are used;
+- native differences are documented in a `Binding`;
+- implementation capability is documented in a `ConformanceProfile`.

@@ -1,0 +1,36 @@
+apiVersion: pri/v0.1
+kind: Promotion
+metadata:
+  name: checkout-v123
+  annotations:
+    example.com/source: release-request
+spec:
+  unit: checkout
+  artifacts:
+    - name: checkout
+      version: v1.2.3
+      digest: sha256:abc123
+      uri: https://example.com/artifacts/checkout/v1.2.3
+  plan:
+    ref: progressive
+  checks:
+    - name: security
+      required: true
+      policyRef: security-release-policy
+      evidenceRefs:
+        - security-scan
+  targets:
+    - name: prod-eu
+      labels:
+        stage: production
+        region: eu
+      delivery:
+        ref: default
+        mode: push
+        parameters:
+          path: services/checkout
+  evidence:
+    - name: security-scan
+      type: verification
+      uri: https://example.com/evidence/security-scan
+      digest: sha256:def456

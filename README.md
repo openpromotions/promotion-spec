@@ -31,6 +31,30 @@ answers portable.
 The goal is not to replace existing delivery systems. The goal is to make
 promotion state understandable across them.
 
+## Why The Contract Matters
+
+The smallest useful PRI document answers three questions:
+
+```text
+what unit is moving?
+which artifact version is moving?
+which target is it moving to?
+```
+
+That tiny contract gives different tools a common record to validate, store,
+share, audit, and translate. A CI workflow, GitOps controller, release tool,
+approval system, or internal platform can all describe the same promotion
+without sharing the same runtime or wire format.
+
+Once the basic intent is portable, tools can add runtime status and evidence:
+
+```text
+intent -> run result -> checks -> target results -> evidence
+```
+
+That is why PRI starts with an object model and schemas. They are the narrowest
+useful surface for interoperability.
+
 ## Architecture
 
 PRI is a layered contract:
@@ -84,7 +108,7 @@ Native tool state
 validate / translate / emit / consume
         |
         v
-PRI Promotion, PromotionRun, Evidence, Binding, ConformanceProfile
+PRI objects: Promotion, PromotionRun, Evidence, Binding, ConformanceProfile
 ```
 
 A tool can adopt PRI in one or more ways:
@@ -107,17 +131,22 @@ integration can later consume `Promotion` intent directly.
 apiVersion: pri/v0.1
 kind: Promotion
 metadata:
-  name: checkout-v123
+  name: hello-world
 spec:
-  unit: checkout
+  unit: hello
   artifacts:
-    - name: checkout
-      version: v1.2.3
+    - name: hello
+      version: v1.0.0
   targets:
-    - name: prod-eu
+    - name: dev
 ```
 
 More examples are in [examples/](examples/).
+
+The examples are written in YAML for readability. YAML is not the PRI wire
+format. PRI v0.1 defines the object contract and JSON Schemas; tools may use
+JSON, YAML, database records, API resources, or another serialization as long as
+the required fields and semantics are preserved.
 
 ## Quick Start
 

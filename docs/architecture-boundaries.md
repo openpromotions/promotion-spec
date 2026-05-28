@@ -8,7 +8,7 @@ do not define the PRI core.
 
 | Layer | Defined by PRI core | Outside the core |
 |---|---|---|
-| Format | `apiVersion`, `kind`, `metadata`, `spec`, `status`, JSON Schemas | External envelopes, storage formats, API resources, database schemas |
+| Object contract | `apiVersion`, `kind`, `metadata`, `spec`, `status`, JSON Schemas | Wire formats, external envelopes, storage formats, API resources, database schemas |
 | Runtime | Semantic operations and state transitions | CLI, API, controller, RPC, workflow engine, or job implementation |
 | Evidence | Evidence document shape and references from checks, targets, and runs | Evidence storage, signing, attestation formats, and dereference behavior |
 | Policy | Check references, required/advisory behavior, and result records | Policy language, policy agent, approval system, or rules engine |
@@ -40,6 +40,9 @@ Promotion -> PromotionRun -> CheckResult -> TargetResult -> Evidence
 
 Implementations can expose those records through any platform shape they need.
 The portable contract is the document model, state model, and evidence model.
+
+PRI v0.1 does not define a required wire format. YAML examples are for humans.
+Tools may use any serialization that preserves the PRI object contract.
 
 ## Tool Consumption Boundary
 

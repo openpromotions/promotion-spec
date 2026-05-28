@@ -12,13 +12,14 @@ ROOT = Path(__file__).resolve().parents[1]
 
 EXAMPLES = [
     ("schemas/v0.1/promotion.schema.json", "examples/00-hello-promotion.yaml"),
-    ("schemas/v0.1/promotionrun.schema.json", "examples/01-promotion-run.yaml"),
-    ("schemas/v0.1/evidence.schema.json", "examples/02-evidence.yaml"),
+    ("schemas/v0.1/promotion.schema.json", "examples/01-promotion-with-check.yaml"),
+    ("schemas/v0.1/promotionrun.schema.json", "examples/02-promotion-run.yaml"),
+    ("schemas/v0.1/evidence.schema.json", "examples/03-evidence.yaml"),
+    ("schemas/v0.1/binding.schema.json", "examples/04-binding.yaml"),
     (
         "schemas/v0.1/conformance-profile.schema.json",
-        "examples/03-conformance-profile.yaml",
+        "examples/05-conformance-profile.yaml",
     ),
-    ("schemas/v0.1/binding.schema.json", "examples/04-binding.yaml"),
 ]
 
 REQUIRED_FILES = [
@@ -37,10 +38,11 @@ REQUIRED_FILES = [
     "spec/pri-conformance.md",
     "examples/README.md",
     "examples/00-hello-promotion.yaml",
-    "examples/01-promotion-run.yaml",
-    "examples/02-evidence.yaml",
-    "examples/03-conformance-profile.yaml",
+    "examples/01-promotion-with-check.yaml",
+    "examples/02-promotion-run.yaml",
+    "examples/03-evidence.yaml",
     "examples/04-binding.yaml",
+    "examples/05-conformance-profile.yaml",
     "schemas/v0.1/promotion.schema.json",
     "schemas/v0.1/promotionrun.schema.json",
     "schemas/v0.1/evidence.schema.json",
@@ -114,7 +116,7 @@ def check_negative_formats() -> list[str]:
 
         bad_evidence = tmpdir / "bad-evidence.yaml"
         bad_evidence.write_text(
-            (ROOT / "examples/02-evidence.yaml")
+            (ROOT / "examples/03-evidence.yaml")
             .read_text()
             .replace("https://example.com/evidence/security-scan", "not a uri")
         )
@@ -123,7 +125,7 @@ def check_negative_formats() -> list[str]:
 
         bad_run = tmpdir / "bad-promotion-run.yaml"
         bad_run.write_text(
-            (ROOT / "examples/01-promotion-run.yaml")
+            (ROOT / "examples/02-promotion-run.yaml")
             .read_text()
             .replace("2026-05-27T17:00:00Z", "not a timestamp", 1)
         )

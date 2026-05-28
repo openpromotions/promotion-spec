@@ -52,6 +52,11 @@ The PRI `apiVersion` declares the PRI contract version of the document. Runtime
 or platform wrappers may have their own versioning, but wrapper versions are
 outside the PRI core contract.
 
+PRI v0.1 does not require a wire format. YAML examples are provided for
+readability. Implementations may exchange PRI as JSON, YAML, API resources,
+database records, files, or another serialization as long as the object contract
+and semantics are preserved.
+
 Portable identifiers such as `metadata.name`, `spec.unit`, `spec.artifacts[].name`,
 `spec.targets[].name`, `spec.checks[].name`, `spec.evidence[].name`, and
 `delivery.ref` are DNS-1123 subdomain compatible in v0.1.

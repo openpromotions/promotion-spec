@@ -4,7 +4,12 @@ This guide explains how existing tools can consume or emit PRI without changing
 their native architecture.
 
 PRI is a contract. A tool integrates by reading, writing, or translating PRI
-documents.
+objects.
+
+YAML examples in this repository are teaching material, not a required wire
+format. PRI v0.1 defines the object model and JSON Schemas. A tool can carry PRI
+as JSON, YAML, database rows, API resources, files, events, or another
+serialization if the required fields and semantics are preserved.
 
 ## Integration Roles
 

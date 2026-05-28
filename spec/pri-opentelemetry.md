@@ -208,5 +208,6 @@ replace the runtime API or state model.
 
 ## Stability
 
-This binding is experimental in v0.1. Future versions may refine the mapping as
-multiple independent implementations prove which signal shapes are useful.
+This binding is part of the v0.1 public draft. Future versions may refine the
+mapping as multiple independent implementations prove which signal shapes are
+useful.

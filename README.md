@@ -1,7 +1,20 @@
 # Promotion Runtime Interface Specification
 
-The Promotion Runtime Interface (PRI) is a draft open specification for safely
+The Promotion Runtime Interface (PRI) is an open specification for safely
 advancing versioned artifacts across explicit targets with auditable decisions.
+
+PRI defines a shared promotion contract. It lets CI/CD, GitOps, fleet,
+compliance, release, and internal platform systems exchange promotion intent,
+runtime status, and evidence without adopting the same implementation.
+
+## Status
+
+PRI v0.1 is a public draft for review and early implementation experiments.
+The repository is ready for public discussion, examples, and prototype
+adapters. The contract is intentionally small, but breaking changes can still
+happen before a stable release.
+
+## Why PRI Exists
 
 Every delivery platform has to answer the same promotion questions:
 
@@ -12,43 +25,57 @@ Every delivery platform has to answer the same promotion questions:
 - what happened at runtime;
 - what evidence proves the decision and result.
 
-Today those answers are usually trapped inside individual CI/CD, GitOps, fleet,
-and internal platform tools. PRI exists to define a shared promotion contract so
-systems can exchange promotion intent, status, and evidence without adopting the
-same implementation.
-
-## Motivation
-
-Cloud-native infrastructure has repeatedly benefited from small, clear
-interoperability contracts. PRI follows that pattern for promotion workflows:
-separate the contract from implementations, keep the core portable, and let many
-tools implement or translate the same interface.
+Today those answers are usually trapped inside individual tools. PRI makes the
+answers portable.
 
 The goal is not to replace existing delivery systems. The goal is to make
 promotion state understandable across them.
 
-## Scope
+## Architecture
 
-PRI defines the portable shape of:
+PRI is a layered contract:
 
-- promotion intent;
-- targets and target metadata;
-- rollout plans and stage ordering;
-- check and approval outcomes;
-- runtime status;
-- decision evidence;
-- conformance expectations.
+```text
+Existing tools and platforms
+        |
+        v
+Adapters and bindings
+        |
+        v
+PRI documents and runtime semantics
+        |
+        +--> conformance scenarios
+        +--> evidence and audit records
+        +--> optional signals and collector pipelines
+```
 
-PRI does not define:
+| Layer | What PRI defines | What stays outside core |
+|---|---|---|
+| Format | `Promotion`, `PromotionRun`, `Evidence`, `ConformanceProfile`, `Binding` documents and JSON Schemas | External storage, API envelopes, database schemas |
+| Runtime | Semantic operations and portable state transitions | Required CLI, RPC, controller, workflow engine, or transport |
+| Bindings | How external systems map to PRI, including adoption mode and round-trip behavior | Tool-specific implementation details |
+| Signals | Portable attribute and event names for promotion observations | Required OpenTelemetry, CloudEvents, CDEvents, or any one event system |
+| Collector | Receiver, processor, exporter roles for promotion data | Required collector runtime or wire protocol |
+| Conformance | Levels, modes, examples, and scenarios | Product certification or signed attestation in v0.1 |
 
-- cluster lifecycle;
-- fleet inventory ownership;
-- GitOps reconciliation;
-- pipeline execution;
-- cloud provisioning;
-- a required implementation language.
+See [Architecture boundaries](docs/architecture-boundaries.md) for the strict
+line between PRI core and optional compatibility layers.
 
-## Example
+## Core Flow
+
+The v0.1 runtime flow is:
+
+```text
+Promotion -> PromotionRun -> CheckResult -> TargetResult -> Evidence
+```
+
+- `Promotion` records intent.
+- `PromotionRun` records execution state for that intent.
+- `CheckResult` records policy, test, approval, or verification outcomes.
+- `TargetResult` records per-target delivery or verification outcomes.
+- `Evidence` records why a decision or result is trustworthy.
+
+## Minimal Example
 
 ```yaml
 apiVersion: pri/v0.1
@@ -60,35 +87,67 @@ spec:
   artifacts:
     - name: checkout
       version: v1.2.3
-  plan:
-    ref: progressive
   targets:
     - name: prod-eu
-      labels:
-        stage: production
-        region: eu
-      delivery:
-        ref: delivery-system
-        mode: push
 ```
 
-The first draft centers on this runtime flow:
+More examples are in [examples/](examples/).
 
-```text
-Promotion -> PromotionRun -> CheckResult -> TargetResult -> Evidence
+## Quick Start
+
+Validate the repository examples locally:
+
+```bash
+python3 -m venv .venv
+. .venv/bin/activate
+python -m pip install jsonschema pyyaml
+python scripts/validate-all.py
 ```
 
-## Repository Status
+Validate a single document:
 
-This repository is intentionally spec-driven. It should contain the contract,
-schemas, examples, and conformance material. Reference engines, fleet managers,
-delivery platforms, and SDKs should live outside this repository unless the
-community later agrees otherwise.
+```bash
+python scripts/validate-example.py \
+  schemas/v0.1/promotion.schema.json \
+  examples/00-hello-promotion.yaml
+```
 
-PRI is experimental. Breaking changes are expected while the first
-implementations prove the contract.
+The same validation runs in GitHub Actions.
 
-Current core draft material:
+## What PRI Is
+
+- A portable promotion document model.
+- A runtime semantic model with portable phases.
+- A binding model for existing tools and platforms.
+- A signal vocabulary for optional telemetry and event export.
+- A conformance starting point for implementations and adapters.
+
+## What PRI Is Not
+
+- Not a fleet manager.
+- Not a cluster lifecycle system.
+- Not a GitOps reconciler.
+- Not a pipeline engine.
+- Not a cloud provisioning API.
+- Not an OpenTelemetry extension.
+- Not tied to Kubernetes, OCI, Git, CI/CD, or any one runtime.
+
+## Adoption Modes
+
+Implementations can adopt PRI at different depths:
+
+| Mode | Meaning |
+|---|---|
+| `native` | The implementation reads and writes PRI directly. |
+| `emission` | The implementation emits PRI records from its native model but does not consume PRI as input. |
+| `bridge` | An external adapter translates between a native model and PRI. |
+
+Emission-only adoption is valid. Existing systems can participate by emitting
+portable promotion records before they consume PRI as input.
+
+## Repository Map
+
+Core contract:
 
 - [PRI v0.1 draft](spec/pri-v0.1.md)
 - [PRI Runtime v0.1](spec/pri-runtime-v0.1.md)
@@ -100,17 +159,35 @@ Current core draft material:
 - [ConformanceProfile JSON Schema](schemas/v0.1/conformance-profile.schema.json)
 - [Binding JSON Schema](schemas/v0.1/binding.schema.json)
 
-Optional interoperability and adoption material:
+Adoption and interoperability:
 
 - [Architecture boundaries](docs/architecture-boundaries.md)
 - [PRI OpenTelemetry Compatibility Binding](spec/pri-opentelemetry.md)
 - [PRI Signal Semantic Conventions](spec/pri-semantic-conventions.md)
 - [PRI Collector Architecture](spec/pri-collector.md)
-- [Hello Promotion example](examples/00-hello-promotion.yaml)
+- [CNCF path](docs/cncf-path.md)
+
+Examples and project process:
+
 - [Examples guide](examples/README.md)
 - [Conformance notes](conformance/README.md)
+- [Design proposals](proposals/README.md)
 - [Governance](GOVERNANCE.md)
 - [Contributing](CONTRIBUTING.md)
+
+## OpenTelemetry Relationship
+
+PRI borrows proven architecture from OpenTelemetry where it helps:
+
+- semantic attribute naming;
+- schema URL style versioning for emitted signal conventions;
+- resource/scope-like producer context;
+- receiver/processor/exporter collector pipelines;
+- optional OTLP transport for telemetry observations.
+
+OpenTelemetry is not the PRI core model. PRI records and runtime semantics
+remain the source of truth. Telemetry signals are observations of promotion
+state, not the state itself.
 
 ## Contributing
 
@@ -122,6 +199,7 @@ Contributions are welcome in the form of:
 - issue reports describing promotion workflows PRI should support;
 - examples from existing tools and internal platforms;
 - schema and terminology improvements;
+- binding proposals for existing ecosystems;
 - conformance ideas;
 - pull requests that make the draft clearer and easier to implement.
 

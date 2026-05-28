@@ -110,4 +110,4 @@ Bindings often support one of the adoption modes defined by PRI conformance:
 
 The `promotion-spec` repository defines the binding model and schemas. Specific
 technology bindings should live outside the core specification repository, for
-example in a future `promotion-bindings` repository.
+example in dedicated binding or integration repositories.

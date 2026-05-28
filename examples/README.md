@@ -44,7 +44,7 @@ python scripts/validate-example.py \
 ```
 
 The example URLs use `example.com` placeholders. They are intentionally not tied
-to Kubernetes, GitOps, OCI, OpenTelemetry, or any one delivery platform.
+to Kubernetes, GitOps, OCI, cloud, or any one delivery platform.
 
 ## How To Read The Flow
 

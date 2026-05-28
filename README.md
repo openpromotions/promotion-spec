@@ -46,20 +46,18 @@ PRI documents and runtime semantics
         |
         +--> conformance scenarios
         +--> evidence and audit records
-        +--> optional signals and collector pipelines
 ```
 
 | Layer | What PRI defines | What stays outside core |
 |---|---|---|
 | Format | `Promotion`, `PromotionRun`, `Evidence`, `ConformanceProfile`, `Binding` documents and JSON Schemas | External storage, API envelopes, database schemas |
 | Runtime | Semantic operations and portable state transitions | Required CLI, RPC, controller, workflow engine, or transport |
+| Policy | Check references, required/advisory behavior, and result records | Policy language, policy agent, approval system, or rules engine |
 | Bindings | How external systems map to PRI, including adoption mode and round-trip behavior | Tool-specific implementation details |
-| Signals | Portable attribute and event names for promotion observations | Required OpenTelemetry, CloudEvents, CDEvents, or any one event system |
-| Collector | Receiver, processor, exporter roles for promotion data | Required collector runtime or wire protocol |
 | Conformance | Levels, modes, examples, and scenarios | Product certification or signed attestation in v0.1 |
 
 See [Architecture boundaries](docs/architecture-boundaries.md) for the strict
-line between PRI core and optional compatibility layers.
+line between PRI core and implementation-specific integration.
 
 ## Core Flow
 
@@ -119,7 +117,6 @@ The same validation runs in GitHub Actions.
 - A portable promotion document model.
 - A runtime semantic model with portable phases.
 - A binding model for existing tools and platforms.
-- A signal vocabulary for optional telemetry and event export.
 - A conformance starting point for implementations and adapters.
 
 ## What PRI Is Not
@@ -128,8 +125,9 @@ The same validation runs in GitHub Actions.
 - Not a cluster lifecycle system.
 - Not a GitOps reconciler.
 - Not a pipeline engine.
+- Not a policy agent.
 - Not a cloud provisioning API.
-- Not an OpenTelemetry extension.
+- Not a telemetry pipeline.
 - Not tied to Kubernetes, OCI, Git, CI/CD, or any one runtime.
 
 ## Adoption Modes
@@ -162,9 +160,6 @@ Core contract:
 Adoption and interoperability:
 
 - [Architecture boundaries](docs/architecture-boundaries.md)
-- [PRI OpenTelemetry Compatibility Binding](spec/pri-opentelemetry.md)
-- [PRI Signal Semantic Conventions](spec/pri-semantic-conventions.md)
-- [PRI Collector Architecture](spec/pri-collector.md)
 - [CNCF path](docs/cncf-path.md)
 
 Examples and project process:
@@ -174,20 +169,6 @@ Examples and project process:
 - [Design proposals](proposals/README.md)
 - [Governance](GOVERNANCE.md)
 - [Contributing](CONTRIBUTING.md)
-
-## OpenTelemetry Relationship
-
-PRI borrows proven architecture from OpenTelemetry where it helps:
-
-- semantic attribute naming;
-- schema URL style versioning for emitted signal conventions;
-- resource/scope-like producer context;
-- receiver/processor/exporter collector pipelines;
-- optional OTLP transport for telemetry observations.
-
-OpenTelemetry is not the PRI core model. PRI records and runtime semantics
-remain the source of truth. Telemetry signals are observations of promotion
-state, not the state itself.
 
 ## Contributing
 
